@@ -9,10 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Date;
+import java.sql.Time;
+
 public class DBAdapter {
 
+    //Still in development, I have no clue why it doesn't create a database yet, to be continued  - Guang Jun//
     private static final String TAG = "DBAdapter";
-
     private static final String KEY_NAME = "name";
     private static final String KEY_TYPE = "type";
     private static final String KEY_DOCTOR = "doctor";
@@ -21,10 +24,12 @@ public class DBAdapter {
     private static final String KEY_VENUE = "venue";
     private static final String KEY_TABLETAMOUNT = "amount";
     private static final String DATABASE_NAME = "MyCareGiver_DB";
+    private static final String APPOINTMENT_TABLE = "Appointment";
+    private static final String MEDICATTION_TABLE = "Medication";
     private static final int DATABASE_VERSION = 1;
 
     private static final String APPOINTMENT_DATABASE_CREATE =
-            "create table Appointment (id integer primary key autoincrement,"
+            "create table " + APPOINTMENT_TABLE + " (id integer primary key autoincrement,"
                     + KEY_NAME + " text not null, "
                     + KEY_TYPE + " text not null, "
                     + KEY_DOCTOR + "text not null,"
@@ -33,7 +38,7 @@ public class DBAdapter {
                     + KEY_VENUE + "text not null);";
 
     private static final String MEDICATION_DATABASE_CREATE =
-            "create table Medication (id integer primary key autoincrement,"
+            "create table " + MEDICATTION_TABLE + " (id integer primary key autoincrement,"
                     + KEY_NAME + " text not null, "
                     + KEY_TABLETAMOUNT + "integer not null, "
                     + KEY_TIME + " time not null);";
@@ -67,7 +72,8 @@ public class DBAdapter {
             Log.d(TAG, "Upgrading database from version " +
                     oldVersion + " to " + newVersion +
                     ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS contacts");
+            db.execSQL("DROP TABLE IF EXISTS Appointment");
+            db.execSQL("DROP TABLE IF EXISTS Medication");
             onCreate(db);
         }
     } // DatabaseHelper
@@ -82,12 +88,18 @@ public class DBAdapter {
         DBHelper.close();
     }// close
 
-//    // ---insert a contact into the database---
-//    public void insertContact(String name, String contact) {
-//        String sqlStmt = "Insert into " + DATABASE_TABLE + " (" + KEY_NAME
-//                + "," + KEY_CONTACT + ") VALUES ('" + name + "','" + contact
-//                + "')";
-//        db.execSQL(sqlStmt);
-//    }// insertContact
-    // TO DO
+    // ---insert a appointment into the database---
+    public void insertAppointment(String name, String type, String doctor, Date date, Time time, String venue) {
+        String sqlStmt = "Insert into " + APPOINTMENT_TABLE + " (" + KEY_NAME
+                + "," + KEY_TYPE + "," + KEY_DOCTOR + "," + KEY_DATE + "," + KEY_TIME + "," + KEY_VENUE + ") VALUES ('" + name + "','" + type
+                + "','" + doctor + "','" + date + "','" + time + "','" + venue + "')";
+        db.execSQL(sqlStmt);
+    }
+
+    public void insertMedication(String name, Integer amount, Time time) {
+        String sqlStmt = "Insert into " + MEDICATTION_TABLE + " (" + KEY_NAME
+                + "," + KEY_TABLETAMOUNT + "," + KEY_TIME + ") VALUES ('" + name + "','" + amount
+                + "','" + time + "')";
+        db.execSQL(sqlStmt);
+    }
 }
