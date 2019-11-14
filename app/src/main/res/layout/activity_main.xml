@@ -43,8 +43,22 @@
             android:layout_below="@+id/add_eme_ctc"
             android:layout_centerHorizontal="true"
             android:text="*TESTING* Println appt data" />
-        <TextView
+        <Button
+            android:id="@+id/testingbtn2"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/testingbtn"
+            android:layout_centerHorizontal="true"
+            android:text="*TESTING* Println med data" />
+        <Button
+            android:id="@+id/testingbtn3"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testingbtn2"
+            android:layout_centerHorizontal="true"
+            android:text="*TESTING* Println ctc data" />
+        <TextView
+            android:layout_below="@+id/testingbtn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/testingtextview"

@@ -3,4 +3,5 @@
     <string name="ApptAdd">Add Appointment</string>
     <string name="add_medication_info">Add Medication Info</string>
     <string name="add_emergency_contact">Add Emergency Contact</string>
+    <string name="title_activity_add_med">add_med</string>
 </resources>

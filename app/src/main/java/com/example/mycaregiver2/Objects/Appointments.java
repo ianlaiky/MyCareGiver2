@@ -135,7 +135,7 @@ public class Appointments {
                 String key_time = (myCursor.getString(MyDbAdapter.COLUMN_KEY_TIME));
                 String key_venue = (myCursor.getString(MyDbAdapter.COLUMN_KEY_VENUE));
 
-                listAppt.add(new Appointments(keyname, key_type, key_doctor, key_date, key_time, key_venue));
+                listAppt.add(new Appointments(key_id,keyname, key_type, key_doctor, key_date, key_time, key_venue));
 
             } while (myCursor.moveToNext());
 
