@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        alarmSet();
 
     }
 
@@ -159,5 +159,11 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, act_bt.class);
         startActivity(intent);
+    }
+
+    public void alarmSet(){
+
+        System.out.println("ALARM RUNN");
+
     }
 }
