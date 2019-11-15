@@ -127,6 +127,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button bt = findViewById(R.id.testingbtn4);
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity_add_bt();
+            }
+        });
 
 
 
@@ -146,6 +153,11 @@ public class MainActivity extends AppCompatActivity {
     public void openActivity_add_ctc() {
 
         Intent intent = new Intent(this, add_ctc.class);
+        startActivity(intent);
+    }
+    public void openActivity_add_bt() {
+
+        Intent intent = new Intent(this, act_bt.class);
         startActivity(intent);
     }
 }
