@@ -2,18 +2,25 @@ package com.example.mycaregiver2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
+import 	androidx.core.app.NotificationCompat;
+import 	android.app.NotificationManager;
+import 	android.app.NotificationChannel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import com.example.mycaregiver2.Objects.Appointments;
 import com.example.mycaregiver2.Objects.Emen_Contact;
 import com.example.mycaregiver2.Objects.Medication;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -134,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 openActivity_add_bt();
             }
         });
-
-        alarmSet();
-
+        alarmSetMed();
+        alarmSetApt();
+        createNotificationChannel();
     }
 
     public void openActivity_add_apt() {
@@ -160,10 +167,83 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, act_bt.class);
         startActivity(intent);
     }
+    private static final String PRIMARY_CHANNEL_ID = "Caregiver";
+    private NotificationManager mNotifyManager;
+    public void createNotificationChannel() {
+        mNotifyManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.O) {
+            // Create a NotificationChannel
+            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
+                    "Caregiver Notification", NotificationManager
+                    .IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Notification for Caregiver");
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+    private static final int NOTIFICATION_ID = 0;
+    public void alarmSetMed(){
+        Date currentTime = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+            String strDate = dateFormat.format(currentTime);
+            Medication medObj = new Medication();
+            ArrayList<Medication> arrMed = medObj.retireveAll(getApplicationContext());
 
-    public void alarmSet(){
+            for (int s = 0; s < arrMed.size(); s++) {
+                System.out.println(strDate);
+                System.out.println (arrMed.get(s).getTime());
+            if (strDate.equals(arrMed.get(s).getTime())){
 
-        System.out.println("ALARM RUNN");
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("Medication notification")
+                        .setContentText("EAT YOUR MEDICINE"+arrMed.get(s).getType()+arrMed.get(s).getName())
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(arrMed.get(s).getName()+" it is time to eat " + arrMed.get(s).getType()))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
+                notificationManager.notify(1001, builder.build());
+            }
+            else{
+                System.out.println("ALARM DID NOT RUN");
+            }
+        }
+    }
+    public void alarmSetApt(){
+        Date currentTime1 = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        String strDate1 = dateFormat.format(currentTime1);
+        Appointments aptObj = new Appointments();
+        ArrayList<Appointments> arrApt = aptObj.retireveAll(getApplicationContext());
 
+        for (int s = 0; s < arrApt.size(); s++) {
+            System.out.println(strDate1);
+            System.out.println (arrApt.get(s).getTime());
+            if (strDate1.equals(arrApt.get(s).getTime())){
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("Appointment notification")
+                        .setContentText("See doctor"+arrApt.get(s).getType()+arrApt.get(s).getName())
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(arrApt.get(s).getName()+" remember to see doctor " + arrApt.get(s).getType()))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
+                notificationManager.notify(1002, builder.build());
+            }
+            else{
+                System.out.println("ALARM DID NOT RUN");
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        alarmSetMed();
+        alarmSetApt();
     }
 }
