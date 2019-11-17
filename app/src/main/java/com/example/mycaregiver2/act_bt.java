@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ import java.util.UUID;
 
 
 public class act_bt extends AppCompatActivity {
-    private String deviceNameToConnect = "BlueNRG";
+    private String deviceNameToConnect;
     private BluetoothGatt mBluetoothGatt;
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -49,11 +50,20 @@ public class act_bt extends AppCompatActivity {
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
             "com.example.bluetooth.le.DEVICE_DOES_NOT_SUPPORT_UART";
     public static final UUID RX_SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+    public static final String RX_SERVICE_UUID_String = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     public static final UUID RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
-
-
+    public final static String ACTION_GATT_CONNECTED =
+            "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
+    public final static String ACTION_GATT_DISCONNECTED =
+            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
+    public final static String ACTION_GATT_SERVICES_DISCOVERED =
+            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+    public final static String ACTION_DATA_AVAILABLE =
+            "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
+    public final static String EXTRA_DATA =
+            "com.example.bluetooth.le.EXTRA_DATA";
 
 
 
@@ -69,6 +79,9 @@ public class act_bt extends AppCompatActivity {
         startScanningButton = findViewById(R.id.StartScanButton);
         startScanningButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                EditText devconne = findViewById(R.id.devnameedittext);
+                String devconstr = String.valueOf(devconne.getText());
+                deviceNameToConnect = devconstr;
                 startScanning();
             }
         });
@@ -106,7 +119,15 @@ public class act_bt extends AppCompatActivity {
             builder.show();
         }
 
-
+final Button sendDataBtn = findViewById(R.id.senddatabtn);
+        sendDataBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText edittextData = findViewById(R.id.senddata);
+                String strData = String.valueOf(edittextData.getText());
+                sendData(strData);
+            }
+        });
 
 
     }
@@ -122,24 +143,74 @@ public class act_bt extends AppCompatActivity {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
-//            System.out.println("GATT STATUS:"+status);
+            String intentAction;
             if (newState == STATE_CONNECTED) {
+                intentAction = ACTION_GATT_CONNECTED;
+                broadcastUpdate(intentAction);
                 System.out.println("Connected to GATT server.");
                 System.out.println("Attempting to start service discovery:" +
                         mBluetoothGatt.discoverServices());
 
-            }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 
+            }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                intentAction = ACTION_GATT_DISCONNECTED;
                 System.out.println("Disconnected from GATT server.");
+                broadcastUpdate(intentAction);
 
             }
         }
-    };
+        @Override
+        // New services discovered
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            for (BluetoothGattService gattService : mBluetoothGatt.getServices()) {
+                System.out.println("Service UUID Found: " + gattService.getUuid().toString());
+            }
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                BluetoothGattService mBluetoothGattService = mBluetoothGatt.getService(UUID.fromString(RX_SERVICE_UUID_String));
+                if (mBluetoothGattService != null) {
+                    System.out.println("Service characteristic UUID found: " + mBluetoothGattService.getUuid().toString());
+//                    String str = "SDASD";
+//                    sendData(str);
+                } else {
+                    System.out.println("Service characteristic not found for UUID: " + RX_SERVICE_UUID);
+                }
 
+            }
+
+
+
+
+
+        }
+
+
+
+    };
+    public void sendData(String data) {
+
+        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+        if (RxService == null) {
+            System.out.println("Rx service not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+        if (RxChar == null) {
+            System.out.println("Rx characteristic not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+
+        RxChar.setValue(data.getBytes(Charset.forName("UTF-8")));
+        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+
+        System.out.println("sending " + data);
+    }
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
+
     }
 
 

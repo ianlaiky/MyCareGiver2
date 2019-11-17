@@ -30,13 +30,44 @@
 
 
             android:text="Stop Scanning" />
+        <EditText
+            android:id="@+id/senddata"
+            android:layout_toEndOf="@id/StopScanButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content">
 
+        </EditText>
+        <Button
+            android:id="@+id/senddatabtn"
+            android:layout_width="100dp"
+            android:layout_toEndOf="@id/senddata"
+            android:layout_height="wrap_content"
+            android:text="Send data"
+            >
+
+        </Button>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/devname"
+        android:layout_below="@id/unit1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+<EditText
+    android:id="@+id/devnameedittext"
+    android:layout_width="170dp"
+    android:layout_height="wrap_content"
+    android:hint="Enter device name">
+
+</EditText>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/unit1">
+        android:layout_below="@id/devname">
         <TextView
             android:id="@+id/PeripheralTextView"
             android:layout_width="match_parent"
