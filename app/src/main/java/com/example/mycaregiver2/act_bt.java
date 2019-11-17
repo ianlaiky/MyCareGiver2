@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -32,6 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -54,6 +57,8 @@ public class act_bt extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     public static final UUID RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+    public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
+    public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -64,7 +69,6 @@ public class act_bt extends AppCompatActivity {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
-
 
 
     @Override
@@ -119,13 +123,17 @@ public class act_bt extends AppCompatActivity {
             builder.show();
         }
 
-final Button sendDataBtn = findViewById(R.id.senddatabtn);
+        final Button sendDataBtn = findViewById(R.id.senddatabtn);
         sendDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText edittextData = findViewById(R.id.senddata);
                 String strData = String.valueOf(edittextData.getText());
                 sendData(strData);
+//                BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+//                BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_SERVICE_UUID);
+//                readCharacteristic(RxChar);
+
             }
         });
 
@@ -133,9 +141,9 @@ final Button sendDataBtn = findViewById(R.id.senddatabtn);
     }
 
     // connect to gatt
-    public void gattConnect(BluetoothDevice device){
+    public void gattConnect(BluetoothDevice device) {
         System.out.println("GATT RUN");
-        mBluetoothGatt = device.connectGatt(this,false,mGattCallback);
+        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
 
     }
 
@@ -152,13 +160,14 @@ final Button sendDataBtn = findViewById(R.id.senddatabtn);
                         mBluetoothGatt.discoverServices());
 
 
-            }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 System.out.println("Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
 
             }
         }
+
         @Override
         // New services discovered
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
@@ -171,21 +180,62 @@ final Button sendDataBtn = findViewById(R.id.senddatabtn);
                     System.out.println("Service characteristic UUID found: " + mBluetoothGattService.getUuid().toString());
 //                    String str = "SDASD";
 //                    sendData(str);
+
                 } else {
                     System.out.println("Service characteristic not found for UUID: " + RX_SERVICE_UUID);
                 }
 
             }
 
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            System.out.println("FSDF");
+            enableTXNotification();
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                System.out.println("sdfsd");
+
+//                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            }
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt,
+                                            BluetoothGattCharacteristic characteristic) {
+            System.out.println("ASD");
 
 
 
+            byte [] ar = new byte [characteristic.getValue().length-2];
+            for (int i = 0; i < characteristic.getValue().length-2; i++) {
+
+                ar[i] = characteristic.getValue()[i];
+            }
+
+            String s = new String(ar, StandardCharsets.US_ASCII);
+            System.out.println(s);
 
         }
 
 
-
     };
+
+
+    public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (btAdapter == null || mBluetoothGatt == null) {
+            System.out.println("BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.readCharacteristic(characteristic);
+    }
+
     public void sendData(String data) {
 
         BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
@@ -204,7 +254,36 @@ final Button sendDataBtn = findViewById(R.id.senddatabtn);
         RxChar.setValue(data.getBytes(Charset.forName("UTF-8")));
         boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
+
         System.out.println("sending " + data);
+    }
+
+    public void enableTXNotification() {
+    	/*
+    	if (mBluetoothGatt == null) {
+    		showMessage("mBluetoothGatt null" + mBluetoothGatt);
+    		broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+    		return;
+    	}
+    		*/
+        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+        if (RxService == null) {
+            System.out.println("Rx service not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
+        if (TxChar == null) {
+            System.out.println("Tx charateristic not found!");
+            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+            return;
+        }
+        mBluetoothGatt.setCharacteristicNotification(TxChar, true);
+
+        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
+
     }
 
     private void broadcastUpdate(final String action) {
@@ -218,16 +297,16 @@ final Button sendDataBtn = findViewById(R.id.senddatabtn);
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            peripheralTextView.append("Device Name: " + result.getDevice().getName() + " rssi: " + result.getRssi() + " Add: "+result.getDevice().getAddress()+ "\n");
+            peripheralTextView.append("Device Name: " + result.getDevice().getName() + " rssi: " + result.getRssi() + " Add: " + result.getDevice().getAddress() + "\n");
             System.out.println(result.getDevice().getName());
             System.out.println(deviceNameToConnect);
-            if(result.getDevice().getName()!=null){
+            if (result.getDevice().getName() != null) {
                 System.out.println("NOT NULL");
-                if (result.getDevice().getName().equals(deviceNameToConnect)){
+                if (result.getDevice().getName().equals(deviceNameToConnect)) {
                     System.out.println("ATTEMPING TO CONNECT GATT");
-                gattConnect(result.getDevice());
-                System.out.println("GATT COMPLETE");
-                stopScanning();
+                    gattConnect(result.getDevice());
+                    System.out.println("GATT COMPLETE");
+                    stopScanning();
                 }
             }
 
