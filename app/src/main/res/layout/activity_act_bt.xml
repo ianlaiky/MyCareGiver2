@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".act_bt">
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/unit1"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+
+            android:id="@+id/StartScanButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+
+
+            android:text="Start Scanning" />
+        <Button
+            android:id="@+id/StopScanButton"
+            android:layout_width="100dp"
+            android:layout_toEndOf="@id/StartScanButton"
+            android:layout_height="wrap_content"
+
+
+            android:text="Stop Scanning" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/unit1">
+        <TextView
+            android:id="@+id/PeripheralTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </TextView>
+
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
