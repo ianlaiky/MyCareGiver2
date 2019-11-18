@@ -180,7 +180,8 @@ public class act_bt extends AppCompatActivity {
                     System.out.println("Service characteristic UUID found: " + mBluetoothGattService.getUuid().toString());
 //                    String str = "SDASD";
 //                    sendData(str);
-
+                    Bluetooth.setmBluetoothGatt(mBluetoothGatt);
+                    enableTXNotification();
                 } else {
                     System.out.println("Service characteristic not found for UUID: " + RX_SERVICE_UUID);
                 }
@@ -192,7 +193,7 @@ public class act_bt extends AppCompatActivity {
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             System.out.println("FSDF");
-            enableTXNotification();
+//            enableTXNotification();
         }
 
         @Override
@@ -228,13 +229,6 @@ public class act_bt extends AppCompatActivity {
     };
 
 
-    public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (btAdapter == null || mBluetoothGatt == null) {
-            System.out.println("BluetoothAdapter not initialized");
-            return;
-        }
-        mBluetoothGatt.readCharacteristic(characteristic);
-    }
 
     public void sendData(String data) {
 

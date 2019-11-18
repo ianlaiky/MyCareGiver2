@@ -54,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //to be delete
+
+        Button btnbtsenddat = findViewById(R.id.testingbtn5);
+        btnbtsenddat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Bluetooth.sendData("testtttt");
+            }
+        });
 
 
         Button testingbtn = findViewById(R.id.testingbtn);
