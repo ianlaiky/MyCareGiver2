@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 while (true) {
                     // do something in the loop
-//                    alarmSetMed();
-//                    alarmSetApt();
+                    alarmSetMed();
+                    alarmSetApt();
                 }
             }
         }).start();
