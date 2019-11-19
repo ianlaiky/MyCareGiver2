@@ -10,10 +10,10 @@
 
     <RelativeLayout
         android:id="@+id/unit1"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_centerHorizontal="true">
+
         <Button
 
             android:id="@+id/StartScanButton"
@@ -22,52 +22,63 @@
 
 
             android:text="Start Scanning" />
+
         <Button
             android:id="@+id/StopScanButton"
             android:layout_width="100dp"
-            android:layout_toEndOf="@id/StartScanButton"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/StartScanButton"
 
 
             android:text="Stop Scanning" />
+
         <EditText
             android:id="@+id/senddata"
-            android:layout_toEndOf="@id/StopScanButton"
             android:layout_width="100dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/StopScanButton">
 
         </EditText>
+
         <Button
             android:id="@+id/senddatabtn"
             android:layout_width="100dp"
-            android:layout_toEndOf="@id/senddata"
             android:layout_height="wrap_content"
-            android:text="Send data"
-            >
+            android:layout_toEndOf="@id/senddata"
+            android:text="Send data">
 
         </Button>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/devname"
-        android:layout_below="@id/unit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/unit1"
         android:layout_centerHorizontal="true">
 
-<EditText
-    android:id="@+id/devnameedittext"
-    android:layout_width="170dp"
-    android:layout_height="wrap_content"
-    android:hint="Enter device name">
+        <EditText
+            android:id="@+id/devnameedittext"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter device name">
 
-</EditText>
+        </EditText>
+
+        <TextView
+            android:id="@+id/loglat"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/devnameedittext" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/devname">
+        android:layout_below="@id/devname"
+        android:layout_centerHorizontal="true">
+
         <TextView
             android:id="@+id/PeripheralTextView"
             android:layout_width="match_parent"
@@ -77,9 +88,7 @@
         </TextView>
 
 
-
     </RelativeLayout>
-
 
 
 </RelativeLayout>

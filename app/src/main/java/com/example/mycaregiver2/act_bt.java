@@ -23,6 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -31,6 +34,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -51,6 +56,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class act_bt extends AppCompatActivity {
+
+    private String lon="0";
+    private String lat="0";
     private String deviceNameToConnect;
     private BluetoothGatt mBluetoothGatt;
     private static final int STATE_DISCONNECTED = 0;
@@ -68,6 +76,7 @@ public class act_bt extends AppCompatActivity {
     public static final String RX_SERVICE_UUID_String = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     public static final UUID RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
@@ -134,6 +143,21 @@ public class act_bt extends AppCompatActivity {
             });
             builder.show();
         }
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+
+            return;
+        }
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        System.out.println("LOCATIOJ RUN");
 
         final Button sendDataBtn = findViewById(R.id.senddatabtn);
         sendDataBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +183,34 @@ public class act_bt extends AppCompatActivity {
 
     }
 
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+           lon = String.valueOf(location.getLongitude());
+           lat = String.valueOf(location.getLatitude());
+
+
+            TextView ed = findViewById(R.id.loglat);
+            ed.setText(lon + ":" + lat);
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+            System.out.println("LOcation status changed");
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+            System.out.println("on provider enabled");
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+            System.out.println("onprovider diabled");
+        }
+
+
+    };
     private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
         @Override
@@ -233,9 +285,8 @@ public class act_bt extends AppCompatActivity {
             System.out.println("ASD");
 
 
-
-            byte [] ar = new byte [characteristic.getValue().length-2];
-            for (int i = 0; i < characteristic.getValue().length-2; i++) {
+            byte[] ar = new byte[characteristic.getValue().length - 2];
+            for (int i = 0; i < characteristic.getValue().length - 2; i++) {
 
                 ar[i] = characteristic.getValue()[i];
             }
@@ -244,18 +295,20 @@ public class act_bt extends AppCompatActivity {
             String s = new String(ar, StandardCharsets.US_ASCII);
             System.out.println(s);
 
-            if(s.equals("999")){
+            if (s.equals("999")) {
                 Date currentTime = Calendar.getInstance().getTime();
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm");
                 String strDate = dateFormat.format(currentTime);
                 System.out.println(strDate);
+
+
                 //todo add gps location
 
                 // todo change here
                 String name = "James";
-                String location = "Singapore";
+                String location = lon+":"+lat;
 
-                String caturl = "https://mycaregiver.herokuapp.com/api/new?"+"name="+name+"&time="+ strDate +"&location="+location;
+                String caturl = "https://mycaregiver.herokuapp.com/api/new?" + "name=" + name + "&time=" + strDate + "&location=" + location;
 
 
                 URL url = null;
@@ -287,7 +340,6 @@ public class act_bt extends AppCompatActivity {
 
 
     };
-
 
 
     public void sendData(String data) {
