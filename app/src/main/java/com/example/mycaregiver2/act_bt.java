@@ -160,6 +160,12 @@ public class act_bt extends AppCompatActivity {
     }
 
     private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            System.out.println("MTU TEST");
+        }
+
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
@@ -176,13 +182,15 @@ public class act_bt extends AppCompatActivity {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 System.out.println("Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
-
+//                mBluetoothGatt.close();
+//                mBluetoothGatt.disconnect();
             }
         }
 
         @Override
         // New services discovered
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            System.out.println("Service discovered to scan for service");
             for (BluetoothGattService gattService : mBluetoothGatt.getServices()) {
                 System.out.println("Service UUID Found: " + gattService.getUuid().toString());
             }
