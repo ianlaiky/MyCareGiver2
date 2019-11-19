@@ -182,8 +182,8 @@ public class act_bt extends AppCompatActivity {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 System.out.println("Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
-//                mBluetoothGatt.close();
-//                mBluetoothGatt.disconnect();
+                mBluetoothGatt.close();
+                mBluetoothGatt.disconnect();
             }
         }
 
