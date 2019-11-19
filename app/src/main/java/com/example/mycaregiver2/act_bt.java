@@ -1,6 +1,8 @@
 package com.example.mycaregiver2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -82,6 +84,7 @@ public class act_bt extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_SMS = 1;
     public static final UUID RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
@@ -143,7 +146,7 @@ public class act_bt extends AppCompatActivity {
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_COARSE_LOCATION);
                 }
             });
             builder.show();
@@ -160,6 +163,13 @@ public class act_bt extends AppCompatActivity {
 
             return;
         }
+
+
+
+
+
+
+
 
         //location services
 //        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -371,9 +381,10 @@ public class act_bt extends AppCompatActivity {
         try {
             SmsManager smgr = SmsManager.getDefault();
             smgr.sendTextMessage(mobileNo, null, txtMessage, null, null);
-            Toast.makeText(act_bt.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+            System.out.println("SMS Sent Successfully");
         } catch (Exception e) {
-            Toast.makeText(act_bt.this, "SMS Failed to Send, Please try again", Toast.LENGTH_SHORT).show();
+            System.out.println("SMS Failed to Send, Please try again");
+            System.out.println(e.toString());
         }
     }
 
