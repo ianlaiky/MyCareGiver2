@@ -28,6 +28,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
@@ -353,6 +354,8 @@ public class act_bt extends AppCompatActivity {
                 } finally {
                     urlConnection.disconnect();
                 }
+                String doctorNo = "91091637"; //
+                sendSMS(doctorNo, "SOS!"); // send message
 
             }
 
@@ -360,9 +363,7 @@ public class act_bt extends AppCompatActivity {
 
             //todo: write sendSMS code here
 
-
-
-
+            //No sendSMS code here thank you
 
 
             //todo: End sendsms code
@@ -372,6 +373,15 @@ public class act_bt extends AppCompatActivity {
 
     };
 
+    public void sendSMS(String mobileNo, String txtMessage) {
+        try {
+            SmsManager smgr = SmsManager.getDefault();
+            smgr.sendTextMessage(mobileNo, null, txtMessage, null, null);
+            Toast.makeText(act_bt.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(act_bt.this, "SMS Failed to Send, Please try again", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void sendData(String data) {
 
