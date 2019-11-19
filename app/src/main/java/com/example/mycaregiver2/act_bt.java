@@ -326,10 +326,6 @@ public class act_bt extends AppCompatActivity {
                 String strDate = dateFormat.format(currentTime);
                 System.out.println(strDate);
 
-
-                //todo add gps location
-
-                // todo change here
                 String name = "James";
                 String location = lon+":"+lat;
 
@@ -360,6 +356,16 @@ public class act_bt extends AppCompatActivity {
 
             }
 
+
+
+            //todo: write sendSMS code here
+
+
+
+
+
+
+            //todo: End sendsms code
 
         }
 
