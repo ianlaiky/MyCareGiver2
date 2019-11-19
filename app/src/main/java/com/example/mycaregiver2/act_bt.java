@@ -241,7 +241,7 @@ public class act_bt extends AppCompatActivity {
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm");
                 String strDate = dateFormat.format(currentTime);
                 System.out.println(strDate);
-
+                //todo add gps location
 
                 // todo change here
                 String name = "James";
