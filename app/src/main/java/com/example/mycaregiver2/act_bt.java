@@ -361,12 +361,6 @@ public class act_bt extends AppCompatActivity {
 
 
 
-            //todo: write sendSMS code here
-
-            //No sendSMS code here thank you
-
-
-            //todo: End sendsms code
 
         }
 
