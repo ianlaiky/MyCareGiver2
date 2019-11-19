@@ -151,9 +151,18 @@ public class MainActivity extends AppCompatActivity {
                 openActivity_add_bt();
             }
         });
-        alarmSetMed();
-        alarmSetApt();
+
         createNotificationChannel();
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    // do something in the loop
+                    alarmSetMed();
+                    alarmSetApt();
+                }
+            }
+        }).start();
     }
 
     public void openActivity_add_apt() {
