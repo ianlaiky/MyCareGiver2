@@ -35,6 +35,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
@@ -56,7 +60,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class act_bt extends AppCompatActivity {
-
+    private FusedLocationProviderClient fusedLocationClient;
     private String lon="0";
     private String lat="0";
     private String deviceNameToConnect;
@@ -155,10 +159,31 @@ public class act_bt extends AppCompatActivity {
 
             return;
         }
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+
+        //location services
+//        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//
+//        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         System.out.println("LOCATIOJ RUN");
 
+        // fused services
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            lon = String.valueOf(location.getLongitude());
+                            lat = String.valueOf(location.getLatitude());
+                            TextView ed = findViewById(R.id.loglat);
+                            ed.setText(lon + ":" + lat);
+                        }
+                    }
+                });
+
+        //end location services
         final Button sendDataBtn = findViewById(R.id.senddatabtn);
         sendDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,34 +208,34 @@ public class act_bt extends AppCompatActivity {
 
     }
 
-    private final LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-           lon = String.valueOf(location.getLongitude());
-           lat = String.valueOf(location.getLatitude());
-
-
-            TextView ed = findViewById(R.id.loglat);
-            ed.setText(lon + ":" + lat);
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-            System.out.println("LOcation status changed");
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-            System.out.println("on provider enabled");
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-            System.out.println("onprovider diabled");
-        }
-
-
-    };
+//    private final LocationListener locationListener = new LocationListener() {
+//        @Override
+//        public void onLocationChanged(Location location) {
+//           lon = String.valueOf(location.getLongitude());
+//           lat = String.valueOf(location.getLatitude());
+//
+//
+//            TextView ed = findViewById(R.id.loglat);
+//            ed.setText(lon + ":" + lat);
+//        }
+//
+//        @Override
+//        public void onStatusChanged(String s, int i, Bundle bundle) {
+//            System.out.println("LOcation status changed");
+//        }
+//
+//        @Override
+//        public void onProviderEnabled(String s) {
+//            System.out.println("on provider enabled");
+//        }
+//
+//        @Override
+//        public void onProviderDisabled(String s) {
+//            System.out.println("onprovider diabled");
+//        }
+//
+//
+//    };
     private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
         @Override
