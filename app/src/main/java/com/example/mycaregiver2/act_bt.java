@@ -365,7 +365,7 @@ public class act_bt extends AppCompatActivity {
                     urlConnection.disconnect();
                 }
                 String doctorNo = "91091637"; //
-                sendSMS(doctorNo, "SOS!"); // send message
+                sendSMS(doctorNo, "SOS! Location: " + lon + ":" + lat); // send message
 
             }
 
