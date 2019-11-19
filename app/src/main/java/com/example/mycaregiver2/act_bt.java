@@ -338,7 +338,7 @@ public class act_bt extends AppCompatActivity {
                 System.out.println(strDate);
 
                 String name = "James";
-                String location = lon+":"+lat;
+                String location = lat+":"+lon;
 
                 String caturl = "https://mycaregiver.herokuapp.com/api/new?" + "name=" + name + "&time=" + strDate + "&location=" + location;
 
