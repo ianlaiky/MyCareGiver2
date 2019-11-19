@@ -32,10 +32,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class act_bt extends AppCompatActivity {
@@ -220,8 +232,48 @@ public class act_bt extends AppCompatActivity {
                 ar[i] = characteristic.getValue()[i];
             }
 
+
             String s = new String(ar, StandardCharsets.US_ASCII);
             System.out.println(s);
+
+            if(s.equals("999")){
+                Date currentTime = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                String strDate = dateFormat.format(currentTime);
+                System.out.println(strDate);
+
+
+                // todo change here
+                String name = "James";
+                String location = "Singapore";
+
+                String caturl = "https://mycaregiver.herokuapp.com/api/new?"+"name="+name+"&time="+ strDate +"&location="+location;
+
+
+                URL url = null;
+                try {
+                    url = new URL(caturl);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                HttpURLConnection urlConnection = null;
+                try {
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                } catch (IOException e) {
+                    System.out.println(e.toString());
+
+                }
+                try {
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+                } catch (IOException e) {
+                    System.out.println(e.toString());
+                } finally {
+                    urlConnection.disconnect();
+                }
+
+            }
+
 
         }
 
