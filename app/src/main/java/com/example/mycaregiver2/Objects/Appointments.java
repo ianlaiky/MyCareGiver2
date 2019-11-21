@@ -108,7 +108,7 @@ public class Appointments {
     }
 
     public ArrayList<Appointments> retireveAll(Context c) {
-        System.out.println("DB APPT RETRIEVAL");
+//        System.out.println("DB APPT RETRIEVAL");
         ArrayList<Appointments> listAppt = new ArrayList<>();
 
         Cursor myCursor;

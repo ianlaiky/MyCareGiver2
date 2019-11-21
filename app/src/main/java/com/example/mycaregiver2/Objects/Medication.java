@@ -74,7 +74,7 @@ public class Medication {
     }
 
     public ArrayList<Medication> retireveAll(Context c) {
-        System.out.println("DB MED RETRIEVAL");
+//        System.out.println("DB MED RETRIEVAL");
         ArrayList<Medication> listAppt = new ArrayList<>();
 
         Cursor myCursor;

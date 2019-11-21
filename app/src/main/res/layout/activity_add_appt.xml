@@ -74,7 +74,7 @@
             android:text="Date"/>
         <EditText
             android:id="@+id/edittext4"
-            android:text="**DO Date selector instead of textfield**"
+            android:hint="**DO Date selector instead of textfield**"
             android:layout_toRightOf="@id/text4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -93,7 +93,7 @@
             android:text="Time"/>
         <EditText
             android:id="@+id/edittext5"
-            android:text="Same for this"
+            android:hint="Same for this"
             android:layout_toRightOf="@id/text5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -112,7 +112,7 @@
             android:text="Doctor"/>
         <EditText
             android:id="@+id/edittext6"
-            android:text="Might want to do a Spinner(dropdown text)"
+            android:hint="Might want to do a Spinner(dropdown text)"
             android:layout_toRightOf="@id/text6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
