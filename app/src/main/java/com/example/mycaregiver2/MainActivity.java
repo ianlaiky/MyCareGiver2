@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         for (int s = 0; s < arrApt.size(); s++) {
             System.out.println(strDate1);
             System.out.println (arrApt.get(s).getTime());
-            if (currentTime1.equals(arrApt.get(s).getTime())){
+            if (currentTime1.equals(arrApt.get(s).getDate() + arrApt.get(s).getTime())){
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle("Appointment notification")
