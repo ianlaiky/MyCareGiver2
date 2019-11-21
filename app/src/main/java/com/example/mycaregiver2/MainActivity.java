@@ -22,6 +22,8 @@ import com.example.mycaregiver2.Objects.Medication;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -157,9 +159,14 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             public void run() {
                 while (true) {
-                    // do something in the loop
-                    alarmSetMed();
-                    alarmSetApt();
+                    try {
+                        sleep(5000);
+                        alarmSetMed();
+                        alarmSetApt();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }).start();
