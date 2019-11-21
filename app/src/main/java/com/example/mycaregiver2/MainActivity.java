@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 0;
     public void alarmSetMed(){
         Date currentTime = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
             String strDate = dateFormat.format(currentTime);
             Medication medObj = new Medication();
             ArrayList<Medication> arrMed = medObj.retireveAll(getApplicationContext());
@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1001, builder.build());
+                Bluetooth.sendData("Time to take medication " + strDate);
             }
             else{
                 System.out.println("ALARM DID NOT RUN");
@@ -232,17 +233,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void alarmSetApt(){
-        Date currentTime1 = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        Calendar cal = Calendar.getInstance(); // creates calendar
+        Date currentTime1 = cal.getTime(); // returns new date object
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String strDate1 = dateFormat.format(currentTime1);
+        cal.add(Calendar.HOUR_OF_DAY, 2); // adds 2 hour
+        cal.setTime(currentTime1); // sets calendar time/date
         Appointments aptObj = new Appointments();
         ArrayList<Appointments> arrApt = aptObj.retireveAll(getApplicationContext());
 
         for (int s = 0; s < arrApt.size(); s++) {
             System.out.println(strDate1);
             System.out.println (arrApt.get(s).getTime());
-            if (strDate1.equals(arrApt.get(s).getTime())){
-
+            if (currentTime1.equals(arrApt.get(s).getTime())){
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle("Appointment notification")
@@ -252,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1002, builder.build());
+                Bluetooth.sendData("Medical appointment now at " + strDate1);
             }
             else{
                 System.out.println("ALARM DID NOT RUN");
