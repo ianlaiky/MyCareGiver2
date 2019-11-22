@@ -201,7 +201,7 @@ public class act_bt extends AppCompatActivity {
             public void onClick(View view) {
                 EditText edittextData = findViewById(R.id.senddata);
                 String strData = String.valueOf(edittextData.getText());
-                sendData(strData);
+                Bluetooth.sendData(strData);
 //                BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
 //                BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_SERVICE_UUID);
 //                readCharacteristic(RxChar);
@@ -388,27 +388,27 @@ public class act_bt extends AppCompatActivity {
         }
     }
 
-    public void sendData(String data) {
-
-        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
-        if (RxService == null) {
-            System.out.println("Rx service not found!");
-            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-            return;
-        }
-        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
-        if (RxChar == null) {
-            System.out.println("Rx characteristic not found!");
-            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-            return;
-        }
-
-        RxChar.setValue(data.getBytes(Charset.forName("UTF-8")));
-        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
-
-
-        System.out.println("sending " + data);
-    }
+//    public void sendData(String data) {
+//
+//        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID); //showMessage("mBluetoothGatt null"+ mBluetoothGatt);
+//        if (RxService == null) {
+//            System.out.println("Rx service not found!");
+//            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+//            return;
+//        }
+//        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+//        if (RxChar == null) {
+//            System.out.println("Rx characteristic not found!");
+//            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+//            return;
+//        }
+//
+//        RxChar.setValue(data.getBytes(Charset.forName("UTF-8")));
+//        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+//
+//
+//        System.out.println("sending " + data);
+//    }
 
     public void enableTXNotification() {
     	/*

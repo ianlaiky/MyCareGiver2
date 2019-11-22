@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1002, builder.build());
                 try{
-                    Bluetooth.sendData("Appt 2hr ltr at " + arrApt.get(s).getTime());
+                    Bluetooth.sendData("Appt: " + arrApt.get(s).getTime());
                 }catch (Exception e){
                     System.out.println(e.toString());
                 }
@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1002, builder.build());
                 try{
-                    Bluetooth.sendData("Tmr appt at " + arrApt.get(s).getTime());
+                    Bluetooth.sendData("Appt: " + arrApt.get(s).getTime());
                 }catch (Exception e){
                     System.out.println(e.toString());
                 }
