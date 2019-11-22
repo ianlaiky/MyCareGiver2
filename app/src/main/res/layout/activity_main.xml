@@ -7,72 +7,90 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        >
+<RelativeLayout
+    android:id="@+id/bigleft"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/add_appt_btn"
 
-        <Button
-            android:id="@+id/add_appt_btn"
-
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/ApptAdd" />
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/ApptAdd" />
 
 
-        <Button
-            android:id="@+id/add_med_btn"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_appt_btn"
-            android:layout_centerHorizontal="true"
-            android:text="@string/add_medication_info" />
+    <Button
+        android:id="@+id/add_med_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_appt_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/add_medication_info" />
 
-        <Button
-            android:id="@+id/add_eme_ctc"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_med_btn"
-            android:layout_centerHorizontal="true"
-            android:text="@string/add_emergency_contact" />
-        <Button
-            android:id="@+id/testingbtn"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_eme_ctc"
-            android:layout_centerHorizontal="true"
-            android:text="*TESTING* Println appt data" />
-        <Button
-            android:id="@+id/testingbtn2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/testingbtn"
-            android:layout_centerHorizontal="true"
-            android:text="*TESTING* Println med data" />
-        <Button
-            android:id="@+id/testingbtn3"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/testingbtn2"
-            android:layout_centerHorizontal="true"
-            android:text="*TESTING* Println ctc data" />
-        <Button
-            android:id="@+id/testingbtn4"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/testingbtn3"
-            android:layout_centerHorizontal="true"
-            android:text="Scan for Devices" />
-        <Button
-            android:id="@+id/testingbtn5"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/testingbtn4"
-            android:layout_centerHorizontal="true"
-            android:text="Sync Time" />
+    <Button
+        android:id="@+id/add_eme_ctc"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_med_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/add_emergency_contact" />
+
+</RelativeLayout>
+<RelativeLayout
+    android:layout_toRightOf="@+id/bigleft"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/bigright">
+
+
+
+
+    <Button
+        android:id="@+id/testingbtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        android:layout_centerHorizontal="true"
+        android:text="Print Appt data" />
+    <Button
+        android:id="@+id/testingbtn2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testingbtn"
+        android:layout_centerHorizontal="true"
+        android:text="Print Med data" />
+    <Button
+        android:id="@+id/testingbtn3"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testingbtn2"
+        android:layout_centerHorizontal="true"
+        android:text="Print Emergency Contact data" />
+    <Button
+        android:id="@+id/testingbtn4"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testingbtn3"
+        android:layout_centerHorizontal="true"
+        android:text="Scan for Devices" />
+    <Button
+        android:id="@+id/testingbtn5"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testingbtn4"
+        android:layout_centerHorizontal="true"
+        android:text="Sync Time" />
+
+</RelativeLayout>
+
         <TextView
-            android:layout_below="@+id/testingbtn4"
+            android:layout_below="@+id/bigright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/testingtextview"
