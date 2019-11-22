@@ -2,6 +2,7 @@ package com.example.mycaregiver2;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -38,6 +39,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mycaregiver2.Objects.Emen_Contact;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,6 +56,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -364,14 +367,20 @@ public class act_bt extends AppCompatActivity {
                 } finally {
                     urlConnection.disconnect();
                 }
-                String doctorNo = "91091637"; //
-                sendSMS(doctorNo, "SOS! Location: " + lon + ":" + lat); // send message
 
+                Emen_Contact emenObj = new Emen_Contact();
+                ArrayList<Emen_Contact> arrEmen = emenObj.retireveAll(getApplicationContext());
+
+                //Loop Thru Emergency Contacts & Send SOS
+                for (int i = 0; i < arrEmen.size(); i++) {
+                    System.out.println(""+arrEmen.get(i).getNumber());
+                    try{
+                        sendSMS(arrEmen.get(i).getNumber(), "SOS! Location: https://maps.google.com/?ll=" + lat + "," + lon + "&q=" + lat + "," + lon);
+                    }catch (Exception e){
+                        System.out.println(e.toString());
+                    }
+                }
             }
-
-
-
-
         }
 
 
@@ -491,7 +500,6 @@ public class act_bt extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                return;
             }
         }
     }
