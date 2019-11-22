@@ -375,13 +375,11 @@ public class act_bt extends AppCompatActivity {
                 for (int i = 0; i < arrEmen.size(); i++) {
                     System.out.println(""+arrEmen.get(i).getNumber());
                     try{
-                        sendSMS(arrEmen.get(i).getNumber(), "SOS! Location: " + lon + ":" + lat);
+                        sendSMS(arrEmen.get(i).getNumber(), "SOS! Location: https://maps.google.com/?ll=" + lat + "," + lon + "&q=" + lat + "," + lon);
                     }catch (Exception e){
                         System.out.println(e.toString());
                     }
                 }
-                //String doctorNo = "91091637";
-                //sendSMS(doctorNo, "SOS! Location: " + lon + ":" + lat);
             }
         }
 
@@ -502,7 +500,6 @@ public class act_bt extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                return;
             }
         }
     }
