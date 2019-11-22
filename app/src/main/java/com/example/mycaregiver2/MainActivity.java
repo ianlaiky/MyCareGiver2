@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 while (true) {
                     try {
-                        sleep(5000);
+                        sleep(10000);
                         alarmSetMed();
                         alarmSetApt();
                     } catch (InterruptedException e) {
