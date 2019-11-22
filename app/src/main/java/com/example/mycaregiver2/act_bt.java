@@ -365,7 +365,7 @@ public class act_bt extends AppCompatActivity {
                     urlConnection.disconnect();
                 }
                 String doctorNo = "91091637"; //
-                sendSMS(doctorNo, "SOS! Location: " + lon + ":" + lat); // send message
+                sendSMS(doctorNo, "SOS! Location: https://maps.google.com/maps?ll=" + lat + "," + lon + "&q=" + lat + "," + lon); // send message
 
             }
 
@@ -491,7 +491,6 @@ public class act_bt extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                return;
             }
         }
     }
