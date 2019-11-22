@@ -74,7 +74,7 @@
             android:text="Date"/>
         <EditText
             android:id="@+id/edittext4"
-            android:hint="**DO Date selector instead of textfield**"
+            android:hint="DD-MM-YYYY"
             android:layout_toRightOf="@id/text4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

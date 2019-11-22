@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //to be delete
-
+        //Sync Time
         Button btnbtsenddat = findViewById(R.id.testingbtn5);
         btnbtsenddat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Bluetooth.sendData("testtttt");
+                String currentDate = "D" + new SimpleDateFormat("yyyy MM dd k m s").format(new Date());
+                Bluetooth.sendData(currentDate);
             }
         });
 
@@ -214,22 +214,22 @@ public class MainActivity extends AppCompatActivity {
     public void alarmSetMed(){
         Date currentTime = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-            String strDate = dateFormat.format(currentTime);
-            Medication medObj = new Medication();
-            ArrayList<Medication> arrMed = medObj.retireveAll(getApplicationContext());
+        String strDate = dateFormat.format(currentTime);
+        Medication medObj = new Medication();
+        ArrayList<Medication> arrMed = medObj.retireveAll(getApplicationContext());
+        System.out.println("Current Time: "+strDate);
 
-            for (int s = 0; s < arrMed.size(); s++) {
-                System.out.println(strDate);
-                System.out.println (arrMed.get(s).getTime());
+        for (int s = 0; s < arrMed.size(); s++) {
+            System.out.println("Medicine #"+s+":");
             if (strDate.equals(arrMed.get(s).getTime())){
-
+                System.out.println("Medicine #"+s+" hit!: "+strDate);
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle("Medication notification")
                         .setContentText("EAT YOUR MEDICINE"+arrMed.get(s).getType()+arrMed.get(s).getName())
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(arrMed.get(s).getName()+" it is time to eat " + arrMed.get(s).getType()))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .bigText(arrMed.get(s).getName()+" it is time to eat " + arrMed.get(s).getType()))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1001, builder.build());
 
@@ -239,27 +239,36 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(e.toString());
                 }
             }
-            else{
-                System.out.println("ALARM DID NOT RUN");
-            }
         }
     }
     public void alarmSetApt(){
+        // 2 Hour Before Notifier
         Calendar cal = Calendar.getInstance(); // creates calendar
         Date currentTime1 = cal.getTime(); // returns new date object
         cal.setTime(currentTime1); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, -2); // minus 2 hour
+        cal.add(Calendar.HOUR_OF_DAY, +2); // plus 2 hour
+
+        // 1 Day Before Notifier
+        Calendar caloneday = Calendar.getInstance(); // creates calendar
+        Date currentTime2 = caloneday.getTime(); // returns new date object
+        caloneday.setTime(currentTime2); // sets calendar time/date
+        caloneday.add(Calendar.DATE, +1); // plus 2 hour
+
 
         Appointments aptObj = new Appointments();
         ArrayList<Appointments> arrApt = aptObj.retireveAll(getApplicationContext());
 
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String strDate1 = dateFormat.format(cal.getTime());
+        String strDate2 = dateFormat.format(caloneday.getTime());
+        System.out.println("'2 Hours Later' time to check: "+strDate1);
+        System.out.println("'1 Day Later' day to check: "+strDate2);
 
         for (int s = 0; s < arrApt.size(); s++) {
-            System.out.println(strDate1);
-            System.out.println (arrApt.get(s).getDate() + " "+arrApt.get(s).getTime());
+            System.out.println("Appointment #"+s+":");
+            System.out.println ("Appointment: "+arrApt.get(s).getDate() + " "+arrApt.get(s).getTime());
             if (strDate1.equals(arrApt.get(s).getDate() + " "+arrApt.get(s).getTime())){
+                System.out.println("Appointment #"+s+" for 2 Hours later hit!: "+strDate1);
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle("Appointment notification")
@@ -270,14 +279,27 @@ public class MainActivity extends AppCompatActivity {
                 androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
                 notificationManager.notify(1002, builder.build());
                 try{
-                    Bluetooth.sendData("Appt at " + arrApt.get(s).getTime());
+                    Bluetooth.sendData("Appt 2hr ltr at " + arrApt.get(s).getTime());
                 }catch (Exception e){
                     System.out.println(e.toString());
                 }
-
             }
-            else{
-                System.out.println("ALARM DID NOT RUN");
+            else if (strDate2.equals(arrApt.get(s).getDate() + " "+arrApt.get(s).getTime())){
+                System.out.println("Appointment #"+s+" for 1 Day later hit!: "+strDate2);
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PRIMARY_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("Appointment notification")
+                        .setContentText("See doctor"+arrApt.get(s).getType()+arrApt.get(s).getName())
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(arrApt.get(s).getName()+" remember to see doctor " + arrApt.get(s).getType()))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                androidx.core.app.NotificationManagerCompat notificationManager = androidx.core.app.NotificationManagerCompat.from(this);
+                notificationManager.notify(1002, builder.build());
+                try{
+                    Bluetooth.sendData("Tmr appt at " + arrApt.get(s).getTime());
+                }catch (Exception e){
+                    System.out.println(e.toString());
+                }
             }
         }
     }

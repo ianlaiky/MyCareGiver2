@@ -63,14 +63,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/testingbtn3"
             android:layout_centerHorizontal="true"
-            android:text="BT" />
+            android:text="Scan for Devices" />
         <Button
             android:id="@+id/testingbtn5"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/testingbtn4"
             android:layout_centerHorizontal="true"
-            android:text="BT send data test" />
+            android:text="Sync Time" />
         <TextView
             android:layout_below="@+id/testingbtn4"
             android:layout_width="wrap_content"
